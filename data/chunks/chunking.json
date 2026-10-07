@@ -1,0 +1,150 @@
+[
+  {
+    "filename": "AXP_0000004962-26-000080_risk_factors.txt",
+    "total_chunks": 142,
+    "chunk_size_target": 1200,
+    "chunk_size_actual_avg": 799.6,
+    "chunk_size_actual_min": 69,
+    "chunk_size_actual_max": 1195,
+    "chunks_below_minimum_threshold": 14,
+    "chunks_at_maximum": 2,
+    "section_distribution": {
+      "Item 1A_RiskFactors": 142
+    },
+    "potential_boilerplate_chunks": 0,
+    "chunks_with_very_low_word_count": 16
+  },
+  {
+    "filename": "BAC_0000070858-26-000157_risk_factors.txt",
+    "total_chunks": 166,
+    "chunk_size_target": 1200,
+    "chunk_size_actual_avg": 812.2,
+    "chunk_size_actual_min": 91,
+    "chunk_size_actual_max": 1197,
+    "chunks_below_minimum_threshold": 10,
+    "chunks_at_maximum": 6,
+    "section_distribution": {
+      "Item 1A_RiskFactors": 166
+    },
+    "potential_boilerplate_chunks": 0,
+    "chunks_with_very_low_word_count": 13
+  },
+  {
+    "filename": "BLK_0001193125-26-071966_risk_factors.txt",
+    "total_chunks": 143,
+    "chunk_size_target": 1200,
+    "chunk_size_actual_avg": 781.6,
+    "chunk_size_actual_min": 55,
+    "chunk_size_actual_max": 1199,
+    "chunks_below_minimum_threshold": 23,
+    "chunks_at_maximum": 5,
+    "section_distribution": {
+      "Item 1A_RiskFactors": 143
+    },
+    "potential_boilerplate_chunks": 0,
+    "chunks_with_very_low_word_count": 27
+  },
+  {
+    "filename": "COF_0000927628-26-000024_risk_factors.txt",
+    "total_chunks": 280,
+    "chunk_size_target": 1200,
+    "chunk_size_actual_avg": 828.2,
+    "chunk_size_actual_min": 27,
+    "chunk_size_actual_max": 1198,
+    "chunks_below_minimum_threshold": 24,
+    "chunks_at_maximum": 16,
+    "section_distribution": {
+      "Item 1A_RiskFactors": 280
+    },
+    "potential_boilerplate_chunks": 0,
+    "chunks_with_very_low_word_count": 24
+  },
+  {
+    "filename": "GS_0000886982-26-000091_risk_factors.txt",
+    "total_chunks": 170,
+    "chunk_size_target": 1200,
+    "chunk_size_actual_avg": 826.3,
+    "chunk_size_actual_min": 98,
+    "chunk_size_actual_max": 1193,
+    "chunks_below_minimum_threshold": 10,
+    "chunks_at_maximum": 1,
+    "section_distribution": {
+      "Item 1A_RiskFactors": 170
+    },
+    "potential_boilerplate_chunks": 0,
+    "chunks_with_very_low_word_count": 14
+  },
+  {
+    "filename": "JPM_0001628280-26-008131_risk_factors.txt",
+    "total_chunks": 125,
+    "chunk_size_target": 1200,
+    "chunk_size_actual_avg": 943.7,
+    "chunk_size_actual_min": 14,
+    "chunk_size_actual_max": 1198,
+    "chunks_below_minimum_threshold": 3,
+    "chunks_at_maximum": 9,
+    "section_distribution": {
+      "Item 1A_RiskFactors": 125
+    },
+    "potential_boilerplate_chunks": 0,
+    "chunks_with_very_low_word_count": 5
+  },
+  {
+    "filename": "MA_0001141391-26-000013_risk_factors.txt",
+    "total_chunks": 101,
+    "chunk_size_target": 1200,
+    "chunk_size_actual_avg": 829.5,
+    "chunk_size_actual_min": 6,
+    "chunk_size_actual_max": 1192,
+    "chunks_below_minimum_threshold": 7,
+    "chunks_at_maximum": 2,
+    "section_distribution": {
+      "Item 1A_RiskFactors": 101
+    },
+    "potential_boilerplate_chunks": 0,
+    "chunks_with_very_low_word_count": 8
+  },
+  {
+    "filename": "PYPL_0001633917-26-000024_risk_factors.txt",
+    "total_chunks": 174,
+    "chunk_size_target": 1200,
+    "chunk_size_actual_avg": 789.7,
+    "chunk_size_actual_min": 20,
+    "chunk_size_actual_max": 1195,
+    "chunks_below_minimum_threshold": 20,
+    "chunks_at_maximum": 5,
+    "section_distribution": {
+      "Item 1A_RiskFactors": 174
+    },
+    "potential_boilerplate_chunks": 0,
+    "chunks_with_very_low_word_count": 24
+  },
+  {
+    "filename": "V_0001403161-25-000089_risk_factors.txt",
+    "total_chunks": 100,
+    "chunk_size_target": 1200,
+    "chunk_size_actual_avg": 826.2,
+    "chunk_size_actual_min": 74,
+    "chunk_size_actual_max": 1197,
+    "chunks_below_minimum_threshold": 11,
+    "chunks_at_maximum": 2,
+    "section_distribution": {
+      "Item 1A_RiskFactors": 100
+    },
+    "potential_boilerplate_chunks": 0,
+    "chunks_with_very_low_word_count": 11
+  },
+  {
+    "filename": "WFC_0000072971-26-000133_risk_factors.txt",
+    "total_chunks": 0,
+    "chunk_size_target": 1200,
+    "chunk_size_actual_avg": null,
+    "chunk_size_actual_min": null,
+    "chunk_size_actual_max": null,
+    "chunks_below_minimum_threshold": 0,
+    "chunks_at_maximum": 0,
+    "section_distribution": {},
+    "potential_boilerplate_chunks": 0,
+    "chunks_with_very_low_word_count": 0
+  }
+]

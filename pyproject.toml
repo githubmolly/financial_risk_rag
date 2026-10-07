@@ -1,0 +1,30 @@
+[project]
+name = "financial-risk-rag"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "anthropic>=0.109.2",
+    "beautifulsoup4>=4.14.3",
+    "chromadb>=1.5.9",
+    "datasets>=5.0.0",
+    "google-cloud-aiplatform>=1.158.0",
+    "google-genai>=2.7.0",
+    "ipykernel>=7.2.0",
+    "jupyter>=1.1.1",
+    "langchain-anthropic>=1.4.6",
+    "langchain-community>=0.4.2",
+    "langchain-huggingface>=1.2.2",
+    "langchain-text-splitters>=1.1.2",
+    "lxml>=6.1.1",
+    "openai>=2.41.1",
+    "pyarrow>=24.0.0",
+    "pydantic>=2.13.4",
+    "pymupdf>=1.27.2.3",
+    "python-dotenv>=1.2.2",
+    "ragas==0.2.14",
+    "rank-bm25>=0.2.2",
+    "sec-edgar-downloader>=5.1.0",
+    "sentence-transformers>=5.5.1",
+]

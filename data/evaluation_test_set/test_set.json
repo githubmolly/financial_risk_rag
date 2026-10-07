@@ -1,0 +1,164 @@
+[
+  {
+    "id": "single_01",
+    "question": "What cybersecurity risks does JPMorgan disclose in its Risk Factors?",
+    "expected_tickers": ["JPM"],
+    "expected_keywords": ["cyber", "data", "information security"],
+    "reference_answer": "JPMorgan discloses risks from cyber attacks targeting its information systems and customer data, including threats from organized criminals, hacktivists, nation-state actors, and insiders. Concerns include theft of confidential information, business interruption, regulatory penalties, and reputational damage.",
+    "category": "single_company",
+    "should_refuse": false
+  },
+  {
+    "id": "single_02",
+    "question": "How does Capital One describe its commercial real estate exposure risk?",
+    "expected_tickers": ["COF"],
+    "expected_keywords": ["commercial real estate", "concentration", "office"],
+    "reference_answer": "Capital One discloses concentration risk in commercial real estate lending, with particular concerns around office and other property segments that have been affected by post-pandemic occupancy and valuation trends. Risks include credit deterioration, charge-offs, and the need for additional reserves.",
+    "category": "single_company",
+    "should_refuse": false
+  },
+  {
+    "id": "single_03",
+    "question": "What climate-related risks does BlackRock identify?",
+    "expected_tickers": ["BLK"],
+    "expected_keywords": ["climate", "transition", "physical"],
+    "reference_answer": "BlackRock discloses climate-related risks including physical risks to assets under management, transition risks from policy and market shifts toward lower-carbon economies, and reputational/regulatory risks tied to ESG-related litigation and political pressure on its investment stewardship practices.",
+    "category": "single_company",
+    "should_refuse": false
+  },
+  {
+    "id": "single_04",
+    "question": "What are PayPal's main risks from third-party service providers?",
+    "expected_tickers": ["PYPL"],
+    "expected_keywords": ["third party", "vendor", "service"],
+    "reference_answer": "PayPal relies on third-party service providers for payment processing, infrastructure, and other critical services. Risks include service disruptions, security breaches at vendors, vendor consolidation, and regulatory liability for actions of third parties.",
+    "category": "single_company",
+    "should_refuse": false
+  },
+  {
+    "id": "single_05",
+    "question": "What interest rate risks does Goldman Sachs disclose?",
+    "expected_tickers": ["GS"],
+    "expected_keywords": ["interest rate", "net interest", "spread"],
+    "reference_answer": "Goldman Sachs discloses risks from interest rate volatility affecting trading positions, financing costs, asset values, client activity levels, and net interest income across its lending and treasury operations.",
+    "category": "single_company",
+    "should_refuse": false
+  },
+  {
+    "id": "single_06",
+    "question": "What geopolitical risks does Visa identify?",
+    "expected_tickers": ["V"],
+    "expected_keywords": ["geopolitical", "sanctions", "international"],
+    "reference_answer": "Visa identifies geopolitical risks including international conflicts, sanctions regimes, trade restrictions, currency controls, and political instability in markets where it operates, all of which can disrupt cross-border transaction volumes and merchant relationships.",
+    "category": "single_company",
+    "should_refuse": false
+  },
+  {
+    "id": "comparison_01",
+    "question": "How do JPM and GS describe their stress-testing and capital requirements differently?",
+    "expected_tickers": ["JPM", "GS"],
+    "expected_keywords": ["stress test", "capital", "Basel"],
+    "reference_answer": "Both firms cite stress testing and capital requirements as material risks. JPM emphasizes its position as a globally systemically important bank (G-SIB) with CCAR oversight and its broader consumer-banking exposure. GS emphasizes capital requirements tied to its trading book, market risk capital, and the impact on its return profile.",
+    "category": "comparison",
+    "should_refuse": false
+  },
+  {
+    "id": "comparison_02",
+    "question": "Compare the cybersecurity risk disclosures of Mastercard and Visa.",
+    "expected_tickers": ["MA", "V"],
+    "expected_keywords": ["cyber", "data", "network"],
+    "reference_answer": "Both payment networks emphasize cybersecurity as a top operational risk given their roles processing trillions in payments. They describe risks of network intrusion, data compromise affecting cardholders, fraud, denial-of-service attacks, and the cascading damage to brand and merchant relationships from any successful attack.",
+    "category": "comparison",
+    "should_refuse": false
+  },
+  {
+    "id": "comparison_03",
+    "question": "How do BAC and COF differ in how they describe consumer credit risk?",
+    "expected_tickers": ["BAC", "COF"],
+    "expected_keywords": ["consumer credit", "delinquency", "charge-off"],
+    "reference_answer": "Both banks cite consumer credit deterioration as a risk, but the framing differs. COF, with its concentration in credit cards and subprime auto, emphasizes sensitivity to unemployment and consumer spending downturns. BAC, with a broader consumer footprint including mortgages, frames consumer credit within its diversified retail exposure.",
+    "category": "comparison",
+    "should_refuse": false
+  },
+  {
+    "id": "comparison_04",
+    "question": "How do PYPL and V describe their exposure to cryptocurrency and stablecoin risks differently?",
+    "expected_tickers": ["PYPL", "V"],
+    "expected_keywords": ["cryptocurrency", "stablecoin", "digital"],
+    "reference_answer": "PayPal discloses direct exposure as an issuer/custodian of its own stablecoin (PYUSD) and a provider of cryptocurrency services to customers, with attendant regulatory, custody, and market risks. Visa describes crypto/stablecoin more as a competitive and infrastructure consideration — emerging payment rails that could disintermediate card networks or that Visa may need to interoperate with.",
+    "category": "comparison",
+    "should_refuse": false
+  },
+  {
+    "id": "comparison_05",
+    "question": "How do AXP and BLK describe their climate-related risks?",
+    "expected_tickers": ["AXP", "BLK"],
+    "expected_keywords": ["climate", "ESG", "transition"],
+    "reference_answer": "AXP describes climate risk through the lens of its cardholder and merchant operations, including physical risks to facilities and transition risks affecting customer industries. BLK describes climate risk primarily through its asset management role — risks to client assets, ESG stewardship litigation, and political/regulatory pressure on its investment policies.",
+    "category": "comparison",
+    "should_refuse": false
+  },
+  {
+    "id": "specific_01",
+    "question": "Which filings discuss CCAR stress testing requirements?",
+    "expected_tickers": ["BAC", "JPM"],
+    "expected_keywords": ["CCAR", "stress test", "capital"],
+    "reference_answer": "BAC and JPM both discuss CCAR (Comprehensive Capital Analysis and Review) stress testing requirements as part of their regulatory capital regime. Both are subject to annual Federal Reserve stress tests that affect capital distribution capacity.",
+    "category": "specific_term",
+    "should_refuse": false
+  },
+  {
+    "id": "specific_02",
+    "question": "Which companies disclose risks related to Dodd-Frank Act requirements?",
+    "expected_tickers": ["BLK", "COF", "GS", "JPM", "V"],
+    "expected_keywords": ["Dodd-Frank", "regulation", "compliance"],
+    "reference_answer": "BLK, COF, GS, JPM, and V each disclose risks related to the Dodd-Frank Act, including ongoing compliance costs, regulatory uncertainty around rulemaking, and the possibility of further legislative or regulatory changes.",
+    "category": "specific_term",
+    "should_refuse": false
+  },
+  {
+    "id": "specific_03",
+    "question": "Which companies mention stablecoin in their Risk Factors?",
+    "expected_tickers": ["AXP", "BAC", "COF", "GS", "JPM", "PYPL", "V"],
+    "expected_keywords": ["stablecoin"],
+    "reference_answer": "AXP, BAC, COF, GS, JPM, PYPL, and V all mention stablecoin in their Risk Factors, framing it variously as a competitive threat to existing payment rails, a regulatory uncertainty, or — for PYPL specifically — a direct product offering with its own custody and market risks.",
+    "category": "specific_term",
+    "should_refuse": false
+  },
+  {
+    "id": "paraphrase_01",
+    "question": "What dangers do these banks face from people breaking into their computer systems?",
+    "expected_tickers": ["AXP", "BAC", "BLK", "COF", "GS", "JPM", "MA", "PYPL", "V"],
+    "expected_keywords": ["cyber", "intrusion", "attack"],
+    "reference_answer": "All filings disclose risks from cyber attacks and system intrusions, including theft of confidential information, business disruption, fraud, regulatory penalties, and reputational damage. Attack sources range from nation-state actors and organized criminals to insiders and third-party-supply-chain compromises.",
+    "category": "paraphrase",
+    "should_refuse": false
+  },
+  {
+    "id": "paraphrase_02",
+    "question": "What problems could arise from companies these firms hire to do work for them?",
+    "expected_tickers": ["AXP", "BAC", "BLK", "COF", "GS", "JPM", "MA", "PYPL", "V"],
+    "expected_keywords": ["third party", "vendor", "service provider"],
+    "reference_answer": "Filings broadly disclose vendor and third-party-provider risks: service disruptions, security breaches at suppliers, vendor concentration, and the firm's own regulatory liability for actions of its outsourced providers.",
+    "category": "paraphrase",
+    "should_refuse": false
+  },
+  {
+    "id": "out_of_scope_01",
+    "question": "What was JPMorgan's exact net income for fiscal year 2024?",
+    "expected_tickers": [],
+    "expected_keywords": [],
+    "reference_answer": "This question cannot be answered from Risk Factors (Item 1A) sections, which describe risks but do not contain specific financial results.",
+    "category": "out_of_scope",
+    "should_refuse": true
+  },
+  {
+    "id": "out_of_scope_02",
+    "question": "Which bank has the best customer service?",
+    "expected_tickers": [],
+    "expected_keywords": [],
+    "reference_answer": "This question is subjective and cannot be answered from Risk Factors disclosures, which describe potential risks rather than service quality assessments.",
+    "category": "out_of_scope",
+    "should_refuse": true
+  }
+]

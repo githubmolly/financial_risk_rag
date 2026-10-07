@@ -1,0 +1,26 @@
+{
+  "collection_name": "financial_risk_10k",
+  "total_items": 1401,
+  "expected_items_from_chunking": 1401,
+  "missing_count": 0,
+  "embedding_model_used": "BAAI/bge-small-en-v1.5",
+  "embedding_dimension": 384,
+  "embeddings_normalized": true,
+  "zero_vector_count": 0,
+  "duplicate_id_check": "passed",
+  "metadata_completeness": {
+    "source": 1401,
+    "ticker": 1401,
+    "company": 1401,
+    "filing_year": 1401,
+    "file_type": 1401,
+    "item": 1401,
+    "chunk_index": 1401,
+    "char_start": 1401,
+    "char_end": 1401
+  },
+  "section_distribution_in_db": {
+    "Item 1A_RiskFactors": 1401
+  },
+  "ingestion_time_seconds": null
+}

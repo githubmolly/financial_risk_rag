@@ -1,0 +1,98 @@
+[
+  {
+    "question_id": "single_01",
+    "question": "What cybersecurity risks does JPMorgan disclose?",
+    "category": "single_company",
+    "precision_at_5": 1.0,
+    "recall_at_5": 1.0,
+    "mrr": 1.0,
+    "retrieved_tickers": [
+      "JPM",
+      "JPM",
+      "JPM",
+      "JPM",
+      "JPM"
+    ],
+    "answer": "JPMorgan discloses several cybersecurity risks:\n\n*   The techniques used in cyber attacks evolve frequently and increase in sophistication, and therefore a cyber attack may not be recognized until launched or may go undetected for extended periods [Chunk 1].\n*   A third-party, after establishing a foothold on an internal network without being detected, may gain access to other networks and systems [Chunk 1].\n*   Cyber attacks can originate from a wide variety of sources, including certain threat actors that are well-resourced and can sustain malicious activities for extended periods [Chunk 1].\n*   JPMorganChase does not have control over the cybersecurity of the systems of its numerous clients, customers, counterparties, and third-party service providers [Chunk 1].\n*   Cybersecurity risks could be intensified by increased volume and complexity of cyber attacks during periods of heightened geopolitical tensions [Chunk 1].\n*   Technological advances such as artificial intelligence (\u201cAI\u201d) and quantum computing may enable malicious actors to develop more advanced social engineering attacks, including targeted phishing attacks [Chunk 1].\n*   Technological advances may counteract or nullify existing information security protections, including cryptographic protections, potentially exposing data [Chunk 3].\n*   JPMorganChase could become increasingly vulnerable to cyber attacks if it does not, in a timely manner, identify and address emerging threats, known vulnerabilities, or shortcomings in its cybersecurity controls, or if it fails to prioritize or complete enhancements to address them [Chunk 3].\n*   The widespread interconnectivity among financial institutions and other financial market infrastructures increases the risk that the disruption of an operational system involving one entity could cause industry-wide operational disruptions [Chunk 4].\n*   The risks associated with the disruption of an operational system of a third-party could be exacerbated if the services provided by that system are widely used by market participants [Chunk 4].\n*   A successful cyber attack could cause significant harm to JPMorganChase and its clients and customers [Chunk 4].\n*   JPMorganChase experiences numerous cyber attacks on its computer systems, software, networks, and other technology assets [Chunk 4].\n*   Cyber attacks could take many forms, and may be designed to introduce computer viruses or malicious code (i.e., \u201cmalware\u201d) into JPMorganChase\u2019s systems [Chunk 4].\n*   Cyber attacks may be designed to obtain unauthorized access to JPMorganChase\u2019s systems or to confidential information belonging to [Chunk 4].\n*   Insider threat activities could lead to the misuse of JPMorganChase\u2019s systems or client and customer information [Chunk 2].\n*   System integration of acquired businesses may be complex or may require extensive and lengthy remediation or enhancement of controls [Chunk 2].\n*   A third-party could misappropriate confidential information obtained by intercepting signals or communications from mobile devices used by JPMorganChase\u2019s employees [Chunk 3].\n*   Cybersecurity risks could affect JPMorganChase\u2019s vendors or other third parties with which it does business or is interconnected [Chunk 2].\n*   A successful circumvention of JPMorganChase\u2019s systems or those of its third parties could cause significant disruption of or loss of access to JPMorganChase\u2019s operational systems and those of its clients, customers, and counterparties [Chunk 2].\n*   A successful circumvention could lead to misappropriation of confidential information of JPMorganChase or that of its clients, customers, counterparties, employees, regulators, or other parties [Chunk 2].",
+    "refused": false,
+    "refusal_correct": true,
+    "citation_hallucination": false,
+    "faithfulness_score": 5,
+    "relevance_score": 4,
+    "faithfulness_reasoning": "Every claim in the AI's answer is directly supported by the provided context and accurately reflects the cybersecurity risks disclosed by JPMorgan.",
+    "relevance_reasoning": "The AI answer extensively details numerous cybersecurity risks, including various forms of cyber attacks, data exposure, misappropriation of confidential information, and disruptions to systems, covering most key points from the reference, though it does not explicitly mention 'ransomware', 'regulatory penalties', or 'reputational damage' by name as the reference does.",
+    "total_latency_ms": 2756.199359893799
+  },
+  {
+    "question_id": "comparison_01",
+    "question": "How do GS and JPM describe their regulatory risk differently?",
+    "category": "comparison",
+    "precision_at_5": 0.8,
+    "recall_at_5": 1.0,
+    "mrr": 1.0,
+    "retrieved_tickers": [
+      "GS",
+      "JPM",
+      "BAC",
+      "JPM",
+      "GS"
+    ],
+    "answer": "Goldman Sachs (GS) describes its regulatory risk in relation to its consumer-oriented deposit-taking and credit card businesses, noting that these businesses are subject to numerous additional regulations that have not historically applied to GS [Chunk 1]. The regulations involve greater scrutiny and compliance risks than those associated with business with institutions and high-net-worth individuals, and compliance is time-consuming, costly, and presents new risks [Chunk 1]. GS also mentions that GS Bank USA is assessed for CRA compliance, and failure to comply could negatively impact its CRA ratings, cause reputational harm, and limit future acquisitions or new activities [Chunk 1].\n\nJPMorgan Chase (JPM) describes its legal and regulatory risks as including the impact of extensive supervision and regulation, as well as changes to or the application, interpretation, or enforcement of applicable law or executive branch actions [Chunk 4]. JPM also notes risks related to differences in regulatory implementation across jurisdictions or with respect to certain competitors, and governmental policies that discourage or penalize business relationships with certain industries or require specific business practices [Chunk 4]. Furthermore, JPM faces risks from penalties and repercussions from litigation or investigations by governmental authorities, less predictable legal and regulatory frameworks in certain jurisdictions, and losses to security holders and unsecured creditors if JPM enters into a resolution [Chunk 4]. JPM also uses the term \"applicable law\" to mean the laws, rules, and regulations that apply to its businesses in the jurisdictions in which it operates [Chunk 2].",
+    "refused": false,
+    "refusal_correct": true,
+    "citation_hallucination": false,
+    "faithfulness_score": 5,
+    "relevance_score": 2,
+    "faithfulness_reasoning": "Every claim in the AI's answer is directly supported by the provided context, accurately reflecting how GS and JPM describe their regulatory risks.",
+    "relevance_reasoning": "The AI describes regulatory risks for both firms but largely misses the specific differentiating emphases highlighted in the reference answer, particularly for GS where its description contradicts the reference.",
+    "total_latency_ms": 1521.315574645996
+  },
+  {
+    "question_id": "specific_01",
+    "question": "Which filings mention LIBOR or SOFR transition?",
+    "category": "specific_term",
+    "precision_at_5": 0.0,
+    "recall_at_5": 0.0,
+    "mrr": 0.0,
+    "retrieved_tickers": [
+      "BLK",
+      "COF",
+      "COF",
+      "COF",
+      "COF"
+    ],
+    "answer": "The provided excerpts do not contain sufficient information to answer this question.",
+    "refused": true,
+    "refusal_correct": false,
+    "citation_hallucination": false,
+    "faithfulness_score": 5,
+    "relevance_score": 1,
+    "faithfulness_reasoning": "The AI correctly states that the provided excerpts do not contain information about LIBOR or SOFR transition, which is true upon reviewing all chunks.",
+    "relevance_reasoning": "The AI answer fails to address the question by stating it lacks information from 'provided excerpts' when no excerpts were provided, whereas the reference answer directly identifies the types of filings.",
+    "total_latency_ms": 541.0823822021484
+  },
+  {
+    "question_id": "out_of_scope_01",
+    "question": "What was PayPal's exact net income in Q3 2024?",
+    "category": "out_of_scope",
+    "precision_at_5": 0.0,
+    "recall_at_5": 1.0,
+    "mrr": 0.0,
+    "retrieved_tickers": [
+      "PYPL",
+      "PYPL",
+      "PYPL",
+      "BLK",
+      "PYPL"
+    ],
+    "answer": "The provided excerpts do not contain sufficient information to answer this question.",
+    "refused": true,
+    "refusal_correct": true,
+    "citation_hallucination": false,
+    "faithfulness_score": null,
+    "relevance_score": null,
+    "faithfulness_reasoning": "",
+    "relevance_reasoning": "",
+    "total_latency_ms": 565.4261112213135
+  }
+]

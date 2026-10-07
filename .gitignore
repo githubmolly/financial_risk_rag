@@ -1,0 +1,31 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Environment / secrets
+.env
+.python-version
+
+# ChromaDB storage
+chroma_db/
+
+# Data (large files)
+data/raw_pdfs/
+data/extracted_text/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+
+# md
+Claude.md
