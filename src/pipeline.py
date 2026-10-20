@@ -35,11 +35,13 @@ class RAGPipeline:
         generator: Generator,
         top_k: int = 5,
         candidate_pool: int = 25,
+        use_reranker: bool = False,
     ):
         self.retriever = retriever
         self.generator = generator
         self.top_k = top_k
         self.candidate_pool = candidate_pool
+        self.use_reranker = use_reranker
 
     def query(
         self,
@@ -57,6 +59,7 @@ class RAGPipeline:
             top_k=top_k,
             candidate_pool=self.candidate_pool,
             where=where,
+            use_reranker=self.use_reranker,
         )
         retrieval_ms = (time.time() - t0) * 1000
 
@@ -100,5 +103,5 @@ class RAGPipeline:
         for i, chunk in enumerate(response.retrieved_chunks, start=1):
             ticker = chunk.metadata.get("ticker", "?")
             marker = "✓" if i in response.cited_chunk_numbers else " "
-            print(f"\n{marker} [Chunk {i}] {ticker} (RRF score: {chunk.score:.4f})")
+            print(f"\n{marker} [Chunk {i}] {ticker} (score: {chunk.score:.4f})")
             print(f"   {chunk.text[:200]}...")

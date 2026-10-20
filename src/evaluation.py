@@ -16,6 +16,7 @@ from typing import Optional
 from google import genai
 
 from src.pipeline import RAGPipeline, RAGResponse
+from src.retrieval import HybridRetriever
 
 
 # ======================================================================
@@ -60,6 +61,20 @@ def mean_reciprocal_rank(retrieved_tickers: list[str], expected_tickers: list[st
         if t in expected_tickers:
             return 1.0 / i
     return 0.0
+
+
+def keyword_recall_at_k(retrieved_texts: list[str], expected_keywords: list[str], k: int) -> float:
+    """Fraction of expected keywords found (case-insensitive) in the top-k chunk texts.
+
+    Ticker metrics only check *which company* a chunk came from. A reranker mostly
+    reorders chunks *within* the same company's filing, so ticker-level P@5 can be
+    flat even when the chunks got more on-topic. This is a cheap content-level proxy.
+    """
+    if not expected_keywords:
+        return 1.0  # vacuous
+    haystack = " ".join(retrieved_texts[:k]).lower()
+    found = sum(1 for kw in expected_keywords if kw.lower() in haystack)
+    return found / len(expected_keywords)
 
 
 # ======================================================================
@@ -313,3 +328,159 @@ def save_results(results: list[EvalResult], path: str) -> None:
     data = [asdict(r) for r in results]
     Path(path).write_text(json.dumps(data, indent=2))
     print(f"✓ Saved {len(results)} results to {path}")
+
+
+# ======================================================================
+# Retrieval-only A/B: baseline (RRF) vs. cross-encoder reranking
+# ======================================================================
+# The reranker only changes retrieval, so compare it at the retrieval layer first:
+# no Gemini calls means no rate limits, no judge noise, and a deterministic result.
+# Run the full Evaluator on both arms only once this shows a retrieval win.
+@dataclass
+class RetrievalResult:
+    """Retrieval-only metrics for one question under one retrieval config."""
+    question_id: str
+    category: str
+    retrieved_ids: list[str]
+    retrieved_tickers: list[str]
+    precision_at_5: float
+    recall_at_5: float
+    mrr: float
+    keyword_recall_at_5: float
+    latency_ms: float
+
+
+def evaluate_retrieval(
+    retriever: HybridRetriever,
+    questions: list[TestQuestion],
+    use_reranker: bool,
+    top_k: int = 5,
+    candidate_pool: int = 25,
+) -> list[RetrievalResult]:
+    """Run retrieval only (no generation) over the test set."""
+    results = []
+    for q in questions:
+        t0 = time.time()
+        chunks = retriever.hybrid_search(
+            query=q.question,
+            top_k=top_k,
+            candidate_pool=candidate_pool,
+            use_reranker=use_reranker,
+        )
+        latency_ms = (time.time() - t0) * 1000
+
+        tickers = [c.metadata.get("ticker", "?") for c in chunks]
+        texts = [c.text for c in chunks]
+        results.append(RetrievalResult(
+            question_id=q.id,
+            category=q.category,
+            retrieved_ids=[c.chunk_id for c in chunks],
+            retrieved_tickers=tickers,
+            precision_at_5=precision_at_k(tickers, q.expected_tickers, k=5),
+            recall_at_5=recall_at_k(tickers, q.expected_tickers, k=5),
+            mrr=mean_reciprocal_rank(tickers, q.expected_tickers),
+            keyword_recall_at_5=keyword_recall_at_k(texts, q.expected_keywords, k=5),
+            latency_ms=latency_ms,
+        ))
+    return results
+
+
+def summarize_retrieval(results: list[RetrievalResult]) -> dict:
+    """Same shape as summarize_results() so print_comparison() works on both."""
+    n = len(results)
+    if n == 0:
+        return {}
+    return {
+        "n_questions": n,
+        "retrieval": {
+            "avg_precision_at_5": sum(r.precision_at_5 for r in results) / n,
+            "avg_recall_at_5": sum(r.recall_at_5 for r in results) / n,
+            "avg_mrr": sum(r.mrr for r in results) / n,
+            "avg_keyword_recall_at_5": sum(r.keyword_recall_at_5 for r in results) / n,
+        },
+        "avg_latency_ms": sum(r.latency_ms for r in results) / n,
+    }
+
+
+def print_comparison(
+    summary_a: dict,
+    summary_b: dict,
+    label_a: str = "baseline",
+    label_b: str = "reranked",
+) -> None:
+    """Side-by-side table of two summaries (from summarize_results or summarize_retrieval)."""
+    def fmt(v):
+        return f"{v:.3f}" if v is not None else "—"
+
+    rows = []
+    for section in ("retrieval", "generation"):
+        for metric in summary_a.get(section, {}):
+            rows.append((metric, summary_a[section][metric], summary_b.get(section, {}).get(metric)))
+    rows.append(("avg_latency_ms", summary_a.get("avg_latency_ms"), summary_b.get("avg_latency_ms")))
+
+    print(f"\n{'Metric':<28} {label_a:<14} {label_b:<14} {'Δ':<10}")
+    print("-" * 66)
+    for metric, va, vb in rows:
+        numeric = isinstance(va, (int, float)) and isinstance(vb, (int, float))
+        delta = f"{vb - va:+.3f}" if numeric else "—"
+        print(f"{metric:<28} {fmt(va):<14} {fmt(vb):<14} {delta:<10}")
+
+
+def compare_rerank_retrieval(
+    retriever: HybridRetriever,
+    questions: list[TestQuestion],
+    top_k: int = 5,
+    candidate_pool: int = 25,
+) -> dict:
+    """Retrieval-only A/B of RRF baseline vs. RRF + cross-encoder rerank.
+
+    Out-of-scope (should_refuse) questions are excluded: they have no correct
+    chunks, so retrieval metrics on them are meaningless and only dilute averages.
+    """
+    in_scope = [q for q in questions if not q.should_refuse]
+    print(f"Comparing on {len(in_scope)} in-scope questions "
+          f"({len(questions) - len(in_scope)} out-of-scope excluded)")
+
+    # Warm-up: the first rerank call loads the cross-encoder (and may download it).
+    # Without this, model load time lands in the first question's latency.
+    retriever.hybrid_search(in_scope[0].question, top_k=top_k,
+                            candidate_pool=candidate_pool, use_reranker=True)
+
+    baseline = evaluate_retrieval(retriever, in_scope, use_reranker=False,
+                                  top_k=top_k, candidate_pool=candidate_pool)
+    reranked = evaluate_retrieval(retriever, in_scope, use_reranker=True,
+                                  top_k=top_k, candidate_pool=candidate_pool)
+
+    summary_baseline = summarize_retrieval(baseline)
+    summary_reranked = summarize_retrieval(reranked)
+    print_comparison(summary_baseline, summary_reranked)
+
+    # Per-question view: an average can hide a reranker that helps some questions
+    # and hurts others. Overlap shows how much the reranker actually changed.
+    print(f"\n{'Question':<16} {'Category':<16} {'Overlap':<9} {'ΔP@5':<8} {'ΔMRR':<8} {'ΔKW@5':<8}")
+    print("-" * 66)
+    for b, r in zip(baseline, reranked):
+        overlap = len(set(b.retrieved_ids) & set(r.retrieved_ids))
+        print(f"{b.question_id:<16} {b.category:<16} {overlap}/{top_k:<7} "
+              f"{r.precision_at_5 - b.precision_at_5:<+8.2f} "
+              f"{r.mrr - b.mrr:<+8.2f} "
+              f"{r.keyword_recall_at_5 - b.keyword_recall_at_5:<+8.2f}")
+
+    return {
+        "baseline": baseline,
+        "reranked": reranked,
+        "summary_baseline": summary_baseline,
+        "summary_reranked": summary_reranked,
+    }
+
+
+def save_retrieval_comparison(comparison: dict, path: str) -> None:
+    """Persist a compare_rerank_retrieval() result to JSON."""
+    data = {
+        "summary_baseline": comparison["summary_baseline"],
+        "summary_reranked": comparison["summary_reranked"],
+        "baseline": [asdict(r) for r in comparison["baseline"]],
+        "reranked": [asdict(r) for r in comparison["reranked"]],
+    }
+    Path(path).write_text(json.dumps(data, indent=2))
+    print(f"✓ Saved retrieval comparison to {path}")
