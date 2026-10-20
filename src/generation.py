@@ -102,7 +102,7 @@ class Generator:
         self.provider = provider
 
         if provider == "anthropic":
-            self.model_name = model_name or "claude-haiku-4-5-20251001"
+            self.model_name = model_name or "claude-opus-5-5"
             self._init_anthropic(api_key)
         elif provider == "gemini":
             self.model_name = model_name or "gemini-2.5-flash-lite"
@@ -122,7 +122,9 @@ class Generator:
         api_key = api_key or os.getenv("ANTHROPIC_API_KEY")
         if not api_key:
             raise ValueError("ANTHROPIC_API_KEY not set in environment or passed in")
-        self.client = Anthropic(api_key=api_key)
+        # SDK retries 429/5xx/connection errors with exponential backoff; the timeout
+        # turns a hung request into an error instead of blocking forever.
+        self.client = Anthropic(api_key=api_key, max_retries=5, timeout=120.0)
 
     def _init_gemini(self, api_key: Optional[str]):
         from google import genai
@@ -180,11 +182,25 @@ class Generator:
         )
 
     def _generate_anthropic(self, prompt: str):
-        response = self.client.messages.create(
+        # Opus 5.5 always thinks; thinking tokens count against max_tokens, so 1024
+        # would truncate answers. Effort (default "medium" here) controls depth.
+        # Server-side fallback: if a safety classifier declines (e.g. a false positive
+        # on cyber-risk text), the API re-runs the request on the fallback model.
+        fallback_kwargs = {}
+        if self.model_name in ("claude-opus-5-5", "claude-opus-5", "claude-fable-5-1"):
+            fallback_kwargs = {
+                "betas": ["server-side-fallback-2026-06-01"],
+                "fallbacks": [{"model": "claude-opus-4-8"}],
+            }
+        response = self.client.beta.messages.create(
             model=self.model_name,
-            max_tokens=1024,
+            max_tokens=16000,
+            output_config={"effort": "medium"},
             messages=[{"role": "user", "content": prompt}],
+            **fallback_kwargs,
         )
+        if response.stop_reason == "refusal":
+            raise RuntimeError(f"Claude declined the request: {response.stop_details}")
         # Claude returns a list of content blocks; concatenate text blocks
         answer_text = "".join(
             block.text for block in response.content if block.type == "text"

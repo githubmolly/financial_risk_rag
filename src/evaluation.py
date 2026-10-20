@@ -13,7 +13,7 @@ from dataclasses import dataclass, asdict
 from pathlib import Path
 from typing import Optional
 
-from google import genai
+from anthropic import Anthropic
 
 from src.pipeline import RAGPipeline, RAGResponse
 from src.retrieval import HybridRetriever
@@ -131,39 +131,70 @@ Scoring rubric:
 Output only the JSON, no other text."""
 
 
+# JSON schemas for structured outputs: the API constrains decoding to the schema,
+# so the response always parses (no code-fence stripping, no parse failures).
+FAITHFULNESS_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "faithfulness_score": {"type": "integer", "enum": [1, 2, 3, 4, 5]},
+        "reasoning": {"type": "string"},
+        "unsupported_claims": {"type": "array", "items": {"type": "string"}},
+    },
+    "required": ["faithfulness_score", "reasoning", "unsupported_claims"],
+    "additionalProperties": False,
+}
+
+RELEVANCE_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "relevance_score": {"type": "integer", "enum": [1, 2, 3, 4, 5]},
+        "reasoning": {"type": "string"},
+    },
+    "required": ["relevance_score", "reasoning"],
+    "additionalProperties": False,
+}
+
+
 class LLMJudge:
-    """LLM-as-judge for faithfulness and relevance scoring."""
+    """LLM-as-judge (Claude) for faithfulness and relevance scoring."""
 
-    def __init__(self, model_name: str = "gemini-2.5-flash"):
-        self.client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
-        self.model_name = model_name  # Use the bigger model for judging
+    def __init__(self, model_name: str = "claude-opus-5-5"):
+        api_key = os.getenv("ANTHROPIC_API_KEY")
+        if not api_key:
+            raise ValueError("ANTHROPIC_API_KEY not set in environment")
+        self.client = Anthropic(api_key=api_key, max_retries=5, timeout=120.0)
+        self.model_name = model_name
 
-    def _call_and_parse(self, prompt: str) -> dict:
-        response = self.client.models.generate_content(
-            model=self.model_name, contents=prompt,
+    def _call_and_parse(self, prompt: str, schema: dict) -> dict:
+        # No refusal fallback here on purpose: a fallback would silently swap in a
+        # different judge model, making scores incomparable across questions/runs.
+        response = self.client.messages.create(
+            model=self.model_name,
+            max_tokens=16000,
+            output_config={
+                "effort": "medium",
+                "format": {"type": "json_schema", "schema": schema},
+            },
+            messages=[{"role": "user", "content": prompt}],
         )
-        text = response.text.strip()
-        # Strip markdown code fences if present
-        if text.startswith("```"):
-            text = text.split("```")[1]
-            if text.startswith("json"):
-                text = text[4:]
-        try:
-            return json.loads(text.strip())
-        except json.JSONDecodeError:
-            return {"error": "parse_failure", "raw": text}
+        if response.stop_reason == "refusal":
+            return {"error": "refusal", "raw": str(response.stop_details)}
+        if response.stop_reason == "max_tokens":
+            return {"error": "truncated", "raw": ""}
+        text = "".join(b.text for b in response.content if b.type == "text")
+        return json.loads(text)
 
     def score_faithfulness(self, question: str, answer: str, context: str) -> dict:
         prompt = FAITHFULNESS_JUDGE_PROMPT.format(
             context=context, question=question, answer=answer,
         )
-        return self._call_and_parse(prompt)
+        return self._call_and_parse(prompt, FAITHFULNESS_SCHEMA)
 
     def score_relevance(self, question: str, answer: str, reference_answer: str) -> dict:
         prompt = RELEVANCE_JUDGE_PROMPT.format(
             question=question, reference_answer=reference_answer, answer=answer,
         )
-        return self._call_and_parse(prompt)
+        return self._call_and_parse(prompt, RELEVANCE_SCHEMA)
 
 
 # ======================================================================
